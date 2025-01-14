@@ -24,12 +24,12 @@ public class NotesController : ControllerBase
         return Ok(notes);
     }
 
-    [HttpGet]
+    [HttpPost]
     public async Task<IActionResult> CreateNote([FromBody] Note note)
     {
         note.CreatedAt = DateTime.UtcNow;
         var userId = int.Parse(User.Identity.Name);
-        var sql = "INSERT INTO Notes (Title, Content, CreateAt, UserId) VALUES (@Title, @Content, @CreatedAt, @UserId)";
+        var sql = "INSERT INTO Notes (Title, Content, CreatedAt, UserId) VALUES (@Title, @Content, @CreatedAt, @UserId)";
         await _db.ExecuteAsync(sql, new { note.Title, note.Content, note.CreatedAt, UserId = userId });
         return Ok();
     }
