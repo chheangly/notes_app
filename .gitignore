@@ -13,11 +13,6 @@ publish/
 # Npm packages
 node_modules/
 
-# npm log files
-npm-debug.log
-yarn-debug.log
-yarn-error.log
-
 # Vue.js build
 /dist/
 /*.log
@@ -27,3 +22,25 @@ yarn-error.log
 
 # Windows Installer files
 Thumbs.db
+
+.DS_Store
+
+# local env files
+.env.local
+.env.*.local
+
+# Log files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Editor directories and files
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+

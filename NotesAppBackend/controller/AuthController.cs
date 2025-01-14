@@ -21,7 +21,7 @@ public class AuthController : ControllerBase
     public async Task<IActionResult> Register([FromBody] UserDto userDto)
     {
         var passwordHash = BCrypt.Net.BCrypt.HashPassword(userDto.Password);
-        var sql = "INSERT INTO Users (Username, PasswordHash) VALUES (@Username, @PasswordHash)";
+        var sql = "INSERT INTO tbUsers (Username, PasswordHash) VALUES (@Username, @PasswordHash)";
         await _db.ExecuteAsync(sql, new { userDto.Username, PasswordHash = passwordHash });
         return Ok(new { Message = "User registered successfully" });
     }
@@ -29,7 +29,7 @@ public class AuthController : ControllerBase
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] UserDto userDto)
     {
-        var sql = "SELECT * FROM Users WHERE Username = @Username";
+        var sql = "SELECT * FROM tbUsers WHERE Username = @Username";
         var user = await _db.QuerySingleOrDefaultAsync<User>(sql, new { userDto.Username });
         if (user == null || !BCrypt.Net.BCrypt.Verify(userDto.Password, user.PasswordHash))
             return Unauthorized(new { Message = "Invalid credentials" });

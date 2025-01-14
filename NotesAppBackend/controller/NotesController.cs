@@ -19,7 +19,7 @@ public class NotesController : ControllerBase
     public async Task<IActionResult> GetNotes()
     {
         var userId = int.Parse(User.Identity.Name);
-        var sql = "SELECT * FROM Notes WHERE UserId = @UserId";
+        var sql = "SELECT * FROM tbNotes WHERE UserId = @UserId";
         var notes = await _db.QueryAsync<Note>(sql, new { UserId = userId });
         return Ok(notes);
     }
@@ -29,7 +29,7 @@ public class NotesController : ControllerBase
     {
         note.CreatedAt = DateTime.UtcNow;
         var userId = int.Parse(User.Identity.Name);
-        var sql = "INSERT INTO Notes (Title, Content, CreatedAt, UserId) VALUES (@Title, @Content, @CreatedAt, @UserId)";
+        var sql = "INSERT INTO tbNotes (Title, Content, CreatedAt, UserId) VALUES (@Title, @Content, @CreatedAt, @UserId)";
         await _db.ExecuteAsync(sql, new { note.Title, note.Content, note.CreatedAt, UserId = userId });
         return Ok();
     }
@@ -41,7 +41,7 @@ public class NotesController : ControllerBase
         note.UpdatedAt = DateTime.UtcNow;
 
         var sql = @"
-            UPDATE Notes
+            UPDATE tbNotes
             SET Title = @Title, Content = @Content, UpdatedAt = @UpdatedAt
             WHERE Id = @Id AND UserId = @UserId
         ";
@@ -58,7 +58,7 @@ public class NotesController : ControllerBase
     public async Task<IActionResult> DeleteNote(int id)
     {
         var userId = int.Parse(User.Identity.Name);
-        var sql = "DELETE FROM Notes WHERE Id = @Id AND UserId = @UserId";
+        var sql = "DELETE FROM tbNotes WHERE Id = @Id AND UserId = @UserId";
         var rowsAffected = await _db.ExecuteAsync(sql, new { Id = id, UserId = userId });
         if (rowsAffected == 0)
         {
