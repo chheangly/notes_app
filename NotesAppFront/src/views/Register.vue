@@ -4,9 +4,9 @@
             <h1 class="text-2xl font-bold text-center mb-6">Register</h1>
             <form @submit.prevent="handleRegister">
                 <div class="mb-4">
-                    <label class="block text-gray-700 font-bold mb-2">Email</label>
-                    <input v-model="email" type="email" class="w-full px-3 py-2 border rounded-lg"
-                        placeholder="Enter your email" />
+                    <label class="block text-gray-700 font-bold mb-2">Username</label>
+                    <input v-model="username" type="username" class="w-full px-3 py-2 border rounded-lg"
+                        placeholder="Enter your username" />
                 </div>
                 <div class="mb-4">
                     <label class="block text-gray-700 font-bold mb-2">Password</label>
@@ -23,18 +23,27 @@
 </template>
 
 <script>
+import { requestRegister } from '@/services/Auth';
+
 export default {
     data() {
         return {
-            email: '',
+            username: '',
             password: '',
         };
     },
     methods: {
-        handleRegister() {
-            if (this.email && this.password) {
-                alert("Registration successful! please log in.");
-                this.$router.push("/login");
+        async handleRegister() {
+            if (this.username && this.password) {
+                requestRegister(
+                    this.username,
+                    this.password, () => {
+                        alert("Registration successful! please log in.");
+                        this.$router.push("/login");
+                    },
+                    () => {
+                        alert("something went wrong");
+                    })
             } else {
                 alert("Please fill all fields.");
             }

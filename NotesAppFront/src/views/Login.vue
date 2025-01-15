@@ -4,9 +4,9 @@
             <h1 class="text-2xl font-bold text-center mb-6">Login</h1>
             <form @submit.prevent="handleLogin">
                 <div class="mb-4">
-                    <label class="block text-gray-700 font-bold mb-2">Email</label>
-                    <input v-model="email" type="email" class="w-full px-3 py-2 border rounded-lg"
-                        placeholder="Enter your email" />
+                    <label class="block text-gray-700 font-bold mb-2">Username</label>
+                    <input v-model="username" type="text" class="w-full px-3 py-2 border rounded-lg"
+                        placeholder="Enter your username" />
                 </div>
                 <div class="mb-4">
                     <label class="block text-gray-700 font-bold mb-2">Password</label>
@@ -23,20 +23,36 @@
 </template>
 
 <script>
+import { requestLogin } from '@/services/Auth';
+
 export default {
     data() {
         return {
-            email: "",
+            username: "",
             password: "",
         }
     },
     methods: {
-        handleLogin() {
-            if (this.email && this.password) {
-                localStorage.setItem('isAuthenticated', 'true');
-                this.$router.push("/");
+        async handleLogin() {
+            if (this.username && this.password) {
+                try {
+                    requestLogin(
+                        this.username,
+                        this.password,
+                        (token) => {
+                            localStorage.setItem("token", token);
+                            localStorage.setItem("isAuthenticated", "true");
+                            this.$router.push("/");
+                        },
+                        (error) => {
+                            alert(error);
+                        }
+                    );
+                } catch {
+                    console.error("Login failed");
+                }
             } else {
-                alert("Please enter valid credentials.");
+                alert("please enter your username and password");
             }
         }
     }
