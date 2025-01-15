@@ -4,6 +4,7 @@ import Notes from "../views/Notes.vue";
 import CreateNote from '../views/CreateNote.vue';
 import Login from '../views/Login.vue';
 import Register from '../views/Register.vue';
+import NoteDetails from '@/views/NoteDetails.vue';
 
 const routes = [
     {
@@ -32,6 +33,12 @@ const routes = [
         path: "/create-note",
         name: "CreateNote",
         component: CreateNote,
+        meta: { requiresAuth: true }
+    },
+    {
+        path: "/note-detail:note",
+        name: "NoteDetail",
+        component: NoteDetails,
         meta: { requiresAuth: true }
     }
 ];

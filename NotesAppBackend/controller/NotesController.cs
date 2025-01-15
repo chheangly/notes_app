@@ -67,4 +67,13 @@ public class NotesController : ControllerBase
         return Ok(new { Message = "Note deleted successfully!" });
     }
 
+    [HttpPost("search")]
+    public async Task<IActionResult> SearchNote([FromBody] SearchNote searchNote)
+    {
+        var userId = int.Parse(User.Identity.Name);
+        var sql = "SELECT * FROM tbNotes WHERE UserId = @UserId AND (Title LIKE @Title OR Content LIKE @Title)";
+        var notes = await _db.QueryAsync<Note>(sql, new { UserId = userId, Title = $"%{searchNote.Content}%" });
+        return Ok(notes);
+    }
+
 }
