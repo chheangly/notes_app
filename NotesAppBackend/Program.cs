@@ -2,7 +2,7 @@ using System.Data;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.Data.SqlClient; 
+using Microsoft.Data.SqlClient;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -39,6 +39,7 @@ if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
     app.MapControllers();
+    app.UseAuthorization();
 }
 
 app.UseHttpsRedirection();
@@ -47,6 +48,22 @@ var summaries = new[]
 {
     "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
 };
+
+app.Use((context, next) =>
+{
+    context.Response.Headers.Add("Access-Control-Allow-Origin", "http://localhost:8080");
+    context.Response.Headers.Add("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+    context.Response.Headers.Add("Access-Control-Allow-Headers", "Content-Type, Authorization");
+    context.Response.Headers.Add("Access-Control-Allow-Credentials", "true");
+
+    if (context.Request.Method == "OPTIONS") {
+        context.Response.StatusCode = 204;
+        return Task.CompletedTask;
+    }
+
+    return next();
+
+});
 
 app.MapGet("/weatherforecast", () =>
 {
