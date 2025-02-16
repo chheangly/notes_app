@@ -13,7 +13,8 @@
                     <input v-model="password" type="password" class="w-full px-3 py-2 border rounded-lg"
                         placeholder="Enter your password" />
                 </div>
-                <button type="submit" class="w-full bg-blue-500 text-white py-2 rounded-lg">Login</button>
+                <button :disabled="!allow_login" type="submit"
+                    class="w-full bg-blue-500 text-white py-2 rounded-lg disabled:bg-gray-400 disabled:cursor-not-allowed">Login</button>
             </form>
             <p class="text-center mt-4">
                 Don't have an account? <router-link to="/register" class="text-blue-500">Register</router-link>
@@ -28,11 +29,25 @@ import { requestLogin } from '@/services/Auth';
 export default {
     data() {
         return {
+            allow_login: false,
             username: "",
             password: "",
         }
     },
+    watch: {
+        username(val) {
+            this.checkAllowLogin();
+        },
+        password(val) {
+            this.checkAllowLogin();
+        }
+    },
     methods: {
+        checkAllowLogin() {
+            this.allow_login =
+                this.username.length > 0 &&
+                this.password.length > 0;
+        },
         async handleLogin() {
             if (this.username && this.password) {
                 try {

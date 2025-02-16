@@ -12,6 +12,7 @@ publish/
 
 # Npm packages
 node_modules/
+yarn.lock
 
 # Vue.js build
 /dist/
